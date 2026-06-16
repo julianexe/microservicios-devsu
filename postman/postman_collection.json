@@ -1,0 +1,772 @@
+{
+  "info": {
+    "name": "Microservicios - Prueba Técnica - Julian Morales",
+    "description": "Colección Postman para validar los microservicios ms-clientes y ms-cuentas. Incluye CRUD de clientes, CRU de cuentas, registro de movimientos y reporte de estado de cuenta.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "clientesHost",
+      "value": "http://localhost:8081/api",
+      "type": "string"
+    },
+    {
+      "key": "cuentasHost",
+      "value": "http://localhost:8082/api",
+      "type": "string"
+    },
+    {
+      "key": "clienteDbId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "cuentaId",
+      "value": "1",
+      "type": "string"
+    },
+    {
+      "key": "movimientoId",
+      "value": "1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health - ms-clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{clientesHost}}/actuator/health",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Health - ms-cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/actuator/health",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "actuator",
+                "health"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "item": [
+        {
+          "name": "Crear Cliente - Jose Lema",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cliente creado correctamente\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "if (response.id) {",
+                  "    pm.collectionVariables.set(\"clienteDbId\", response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema\",\n  \"genero\": \"Masculino\",\n  \"edad\": 35,\n  \"identificacion\": \"ID-001\",\n  \"direccion\": \"Otavalo sn\",\n  \"telefono\": \"310123\",\n  \"clienteId\": \"CLI-001\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{clientesHost}}/clientes",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cliente - Marianela Montalvo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Marianela Montalvo\",\n  \"genero\": \"Femenino\",\n  \"edad\": 32,\n  \"identificacion\": \"ID-002\",\n  \"direccion\": \"Amazonas\",\n  \"telefono\": \"311456\",\n  \"clienteId\": \"CLI-002\",\n  \"contrasena\": \"5678\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{clientesHost}}/clientes",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cliente - Juan Osorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Osorio\",\n  \"genero\": \"Masculino\",\n  \"edad\": 28,\n  \"identificacion\": \"ID-003\",\n  \"direccion\": \"13 junio\",\n  \"telefono\": \"312789\",\n  \"clienteId\": \"CLI-003\",\n  \"contrasena\": \"1245\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{clientesHost}}/clientes",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Clientes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{clientesHost}}/clientes",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Cliente por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{clientesHost}}/clientes/{{clienteDbId}}",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteDbId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Cliente Completo",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Jose Lema Actualizado\",\n  \"genero\": \"Masculino\",\n  \"edad\": 36,\n  \"direccion\": \"Otavalo sn actualizado\",\n  \"telefono\": \"310123\",\n  \"contrasena\": \"1234\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{clientesHost}}/clientes/{{clienteDbId}}",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteDbId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Cliente Parcial",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telefono\": \"310999\",\n  \"direccion\": \"Nueva direccion\"\n}"
+            },
+            "url": {
+              "raw": "{{clientesHost}}/clientes/{{clienteDbId}}",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteDbId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Eliminar Cliente - Borrado Logico",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{clientesHost}}/clientes/{{clienteDbId}}",
+              "host": [
+                "{{clientesHost}}"
+              ],
+              "path": [
+                "clientes",
+                "{{clienteDbId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cuentas",
+      "item": [
+        {
+          "name": "Crear Cuenta 111111 - Jose Lema",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Cuenta creada correctamente\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "if (response.id) {",
+                  "    pm.collectionVariables.set(\"cuentaId\", response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"111111\",\n  \"tipoCuenta\": \"AHORROS\",\n  \"saldoInicial\": 2000,\n  \"estado\": true,\n  \"clienteId\": \"CLI-001\"\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cuenta 222222 - Marianela Montalvo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"222222\",\n  \"tipoCuenta\": \"CORRIENTE\",\n  \"saldoInicial\": 100,\n  \"estado\": true,\n  \"clienteId\": \"CLI-002\"\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cuenta 333333 - Juan Osorio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"333333\",\n  \"tipoCuenta\": \"AHORROS\",\n  \"saldoInicial\": 0,\n  \"estado\": true,\n  \"clienteId\": \"CLI-003\"\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cuenta 444444 - Marianela Montalvo",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"444444\",\n  \"tipoCuenta\": \"AHORROS\",\n  \"saldoInicial\": 540,\n  \"estado\": true,\n  \"clienteId\": \"CLI-002\"\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Crear Cuenta 555555 - Jose Lema",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"555555\",\n  \"tipoCuenta\": \"CORRIENTE\",\n  \"saldoInicial\": 1000,\n  \"estado\": true,\n  \"clienteId\": \"CLI-001\"\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Cuentas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Cuenta por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Cuenta Completa",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tipoCuenta\": \"AHORROS\",\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Actualizar Cuenta Parcial",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"estado\": true\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/cuentas/{{cuentaId}}",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "cuentas",
+                "{{cuentaId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Movimientos",
+      "item": [
+        {
+          "name": "Retiro 575 - Cuenta 111111",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Movimiento creado correctamente\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "const response = pm.response.json();",
+                  "if (response.id) {",
+                  "    pm.collectionVariables.set(\"movimientoId\", response.id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"111111\",\n  \"valor\": -575\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Deposito 600 - Cuenta 222222",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"222222\",\n  \"valor\": 600\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Deposito 150 - Cuenta 333333",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"333333\",\n  \"valor\": 150\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retiro 540 - Cuenta 444444",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"444444\",\n  \"valor\": -540\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Retiro sin saldo disponible",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"Debe responder saldo no disponible\", function () {",
+                  "    pm.response.to.have.status(409);",
+                  "});",
+                  "",
+                  "pm.test(\"Mensaje correcto\", function () {",
+                  "    const response = pm.response.json();",
+                  "    pm.expect(response.message).to.eql(\"saldo no disponible\");",
+                  "});"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"numeroCuenta\": \"333333\",\n  \"valor\": -1000\n}"
+            },
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Listar Movimientos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Buscar Movimiento por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/movimientos/{{movimientoId}}",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "movimientos",
+                "{{movimientoId}}"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "Estado de Cuenta - Marianela Montalvo",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/reportes?fechaInicio=2022-02-01&fechaFin=2022-02-28&clienteId=CLI-002",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "fechaInicio",
+                  "value": "2022-02-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2022-02-28"
+                },
+                {
+                  "key": "clienteId",
+                  "value": "CLI-002"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Estado de Cuenta - Jose Lema",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{cuentasHost}}/reportes?fechaInicio=2022-02-01&fechaFin=2022-02-28&clienteId=CLI-001",
+              "host": [
+                "{{cuentasHost}}"
+              ],
+              "path": [
+                "reportes"
+              ],
+              "query": [
+                {
+                  "key": "fechaInicio",
+                  "value": "2022-02-01"
+                },
+                {
+                  "key": "fechaFin",
+                  "value": "2022-02-28"
+                },
+                {
+                  "key": "clienteId",
+                  "value": "CLI-001"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
